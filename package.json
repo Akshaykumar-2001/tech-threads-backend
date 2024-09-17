@@ -1,0 +1,15 @@
+{
+  "name": "tech-threads",
+  "version": "1.0.0",
+  "description": "tech-threads a social media like application for developers",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "author": "Akshay Kumar Kanugula",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
