@@ -1,45 +1,27 @@
 const express = require("express");
+const connectDB = require("./config/database");
 const app = express();
+const User = require("./models/userModel");
 
-//hangs
-// app.get("/test", (req, res) => {
-
-// });
-
-// error : Cannot GET /test
-// app.get("/test", (req, res, next) => {
-//   next();
-// });
-
-// 2nd request handler not used as it is not invoked using next()
-// app.get(
-//   "/test",
-//   (req, res, next) => {
-//     next();
-//   },
-//   (req, res) => {
-//     res.send("respone");
-//   },
-//   (req, res) => {}
-// );
-app.use("/user/login", (req, res) => {
-  res.send("res not sended");
-});
-app.use("/user", (req, res, next) => {
-  const token = "xyz";
-  const flag = "xyz" === token;
-  if (flag) {
-    console.log("auth checked****");
-    // res.send("yes");
-    next();
-  } else {
-    res.status(401).send("unauthorized");
-  }
-});
-app.get("/user/data", (req, res) => {
-  res.send("data");
+app.post("/signup", async (req, res) => {
+  const userObj = {
+    firstName: "Akshay",
+    lastName: "Kanugula",
+    age: 22,
+    gender: "male",
+  };
+  const user = new User(userObj);
+  await user.save();
+  res.send("saved to DB");
 });
 
-app.listen(3000, () => {
-  console.log("server of listening to 3000 port");
-});
+connectDB()
+  .then(() => {
+    console.log("DB connected successfully");
+    app.listen(3000, () => {
+      console.log("server of listening to 3000 port");
+    });
+  })
+  .catch((err) => {
+    console.log("DB not connected successfully");
+  });
