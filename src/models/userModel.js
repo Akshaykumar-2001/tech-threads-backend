@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    emaiId: {
+    emailId: {
       type: String,
       required: true,
       lowercase: true,
@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       validate(value) {
         if (!validator.isEmail(value)) {
-          throw new Error("Invalid EmailAddress");
+          throw new Error("Invalid Email Address");
         }
       },
     },
