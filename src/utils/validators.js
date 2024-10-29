@@ -1,7 +1,7 @@
 const validator = require("validator");
 const validateSignUpData = (req) => {
   const { firstName, lastName, emailId } = req.body;
-  console.log(emailId, firstName);
+
   if (firstName.length === 0) {
     throw new Error("Enter valid first name");
   } else if (firstName.length < 4 || firstName.length > 50) {
