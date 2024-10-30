@@ -4,8 +4,12 @@ const app = express();
 const User = require("./models/userModel");
 const { validateSignUpData } = require("./utils/validators");
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+const { auth } = require("./middlewares/auth");
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signup", async (req, res) => {
   try {
@@ -40,6 +44,9 @@ app.post("/login", async (req, res) => {
     if (!isPasswordValid) {
       throw new Error("Email/password is incorrect");
     }
+    const jwtToken = await jwt.sign({ _id: user._id }, "Akshay$1209");
+    console.log(jwtToken);
+    res.cookie("token", jwtToken);
     res.send("login successfully !");
   } catch (err) {
     res.status(400).send("ERROR - " + err.message);
@@ -56,7 +63,16 @@ app.get("/user", async (req, res) => {
     }
     res.send(user);
   } catch (err) {
-    res.send(err);
+    res.status(400).send("ERROR - " + err.message);
+  }
+});
+
+app.get("/profile", auth, async (req, res) => {
+  try {
+    console.log(req.user);
+    res.send(req.user);
+  } catch (err) {
+    res.status(400).send(err.message);
   }
 });
 
