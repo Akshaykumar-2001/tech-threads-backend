@@ -6,7 +6,7 @@ const { validateSignUpData } = require("./utils/validators");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-const { auth } = require("./middlewares/auth");
+const { userAuth } = require("./middlewares/auth");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -44,7 +44,9 @@ app.post("/login", async (req, res) => {
     if (!isPasswordValid) {
       throw new Error("Email/password is incorrect");
     }
-    const jwtToken = await jwt.sign({ _id: user._id }, "Akshay$1209");
+    const jwtToken = await jwt.sign({ _id: user._id }, "Akshay$1209", {
+      expiresIn: "1d",
+    });
     console.log(jwtToken);
     res.cookie("token", jwtToken);
     res.send("login successfully !");
@@ -67,7 +69,7 @@ app.get("/user", async (req, res) => {
   }
 });
 
-app.get("/profile", auth, async (req, res) => {
+app.get("/profile", userAuth, async (req, res) => {
   try {
     console.log(req.user);
     res.send(req.user);
