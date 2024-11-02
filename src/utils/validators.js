@@ -15,4 +15,31 @@ const validateSignUpData = (req) => {
   }
 };
 
-module.exports = { validateSignUpData };
+const validateProfileEditData = (req) => {
+  const allowedEditFields = [
+    "firstName",
+    "lastName",
+    "emailId",
+    "photoUrl",
+    "gender",
+    "age",
+    "about",
+    "skills",
+  ];
+  const isValidEdit = Object.keys(req.body).every((key) =>
+    allowedEditFields.includes(key)
+  );
+
+  if (!isValidEdit) {
+    throw new Error("Invalid edit1 !!");
+  }
+  if (req?.body?.skills?.size > 15) {
+    throw new Error("Skills must be less than 15");
+  }
+  if (req?.body?.about?.size > 100) {
+    throw new Error("about must be less than 100 chars");
+  }
+  return isValidEdit;
+};
+
+module.exports = { validateSignUpData, validateProfileEditData };

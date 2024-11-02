@@ -47,7 +47,8 @@ const userSchema = new mongoose.Schema(
     },
     photoUrl: {
       type: String,
-      default: "default.png",
+      default:
+        "https://raw.githubusercontent.com/akshaykumar2001/photos-assets/refs/heads/main/person-dummy.jpg",
       // validate is url
     },
     about: {

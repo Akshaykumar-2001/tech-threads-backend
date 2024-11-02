@@ -30,20 +30,33 @@ authRouter.post("/signup", async (req, res) => {
 authRouter.post("/login", async (req, res) => {
   try {
     const { emailId, password } = req.body;
+    // checking weather user is there or not
     const user = await User.findOne({ emailId });
     if (!user) {
       throw new Error("Email/password is incorrect");
     }
+    // checking pass
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new Error("Email/password is incorrect");
     }
+    // verifying and getting data from token
     const jwtToken = await jwt.sign({ _id: user._id }, "Akshay$1209", {
       expiresIn: "1d",
     });
     console.log(jwtToken);
+    // attacking token to cookies in (name , value) pairs
     res.cookie("token", jwtToken);
     res.send("login successfully !");
+  } catch (err) {
+    res.status(400).send("ERROR - " + err.message);
+  }
+});
+
+authRouter.post("/logout", async (req, res) => {
+  try {
+    res.cookie("token", null, { expires: new Date(Date.now()) });
+    res.send("loged out !!");
   } catch (err) {
     res.status(400).send("ERROR - " + err.message);
   }
