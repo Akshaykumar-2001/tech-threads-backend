@@ -42,7 +42,7 @@ authRouter.post("/login", async (req, res) => {
     }
     // verifying and getting data from token
     const jwtToken = await jwt.sign({ _id: user._id }, "Akshay$1209", {
-      expiresIn: "1d",
+      expiresIn: "1h",
     });
     console.log(jwtToken);
     // attacking token to cookies in (name , value) pairs
