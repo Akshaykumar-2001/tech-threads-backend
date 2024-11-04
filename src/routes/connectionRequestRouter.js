@@ -11,7 +11,8 @@ connectionRequestRouter.post(
   async (req, res) => {
     try {
       const fromUserId = req.user._id;
-      const { toUserId, status } = req.params;
+      const { userId, status } = req.params;
+      const toUserId = userId;
 
       // only ignore and interested are allowwed in this API
       if (status === "ignored" || status === "interested") {
@@ -21,6 +22,7 @@ connectionRequestRouter.post(
       }
 
       //checking if toUserId is valid mongoose-id or not
+      console.log(toUserId);
       if (!mongoose.Types.ObjectId.isValid(toUserId)) {
         return res.status(400).send("Invalid user ID format");
       }
