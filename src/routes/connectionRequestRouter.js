@@ -3,6 +3,7 @@ const connectionRequestRouter = express.Router();
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequest = require("../models/connectionRequestModel");
 const User = require("../models/userModel");
+const mongoose = require("mongoose");
 
 connectionRequestRouter.post(
   "/request/send/:status/:userId",
@@ -10,8 +11,7 @@ connectionRequestRouter.post(
   async (req, res) => {
     try {
       const fromUserId = req.user._id;
-      const toUserId = req.params.userId;
-      const status = req.params.status;
+      const { toUserId, status } = req.params;
 
       // only ignore and interested are allowwed in this API
       if (status === "ignored" || status === "interested") {
@@ -20,6 +20,10 @@ connectionRequestRouter.post(
         return res.status(400).json("invalid status type " + status); // return b/c we dont want to run below code at this point
       }
 
+      //checking if toUserId is valid mongoose-id or not
+      if (!mongoose.Types.ObjectId.isValid(toUserId)) {
+        return res.status(400).send("Invalid user ID format");
+      }
       // check for valid id
       const toUser = await User.findById(toUserId);
       if (!toUser) {
@@ -53,6 +57,46 @@ connectionRequestRouter.post(
     } catch (err) {
       console.log(err);
       res.status(400).send("Error " + err.messaage);
+    }
+  }
+);
+
+connectionRequestRouter.post(
+  "/request/review/:status/:requestId",
+  userAuth,
+  async (req, res) => {
+    try {
+      const loggedInUser = req.user;
+      const { status, requestId } = req.params; //requestId - connectionRequestModel-> _id
+
+      //validate status
+      if (status === "accepted" || status === "rejected") {
+      } else {
+        throw new Error("Invalid status !!");
+      }
+
+      //checking for mongoose id is valid or not
+      if (!mongoose.Types.ObjectId.isValid(requestId)) {
+        return res.status(400).send("Invalid user ID format");
+      }
+
+      // incomming request to logged in user
+      // validate request present or not
+      const request = await ConnectionRequest.findOne({
+        _id: requestId,
+        toUserId: loggedInUser._id,
+        status: "interested",
+      });
+      if (!request) {
+        return res.status(400).send("invalid user");
+      }
+      request.status = status;
+      const data = await request.save();
+
+      res.json({ message: status, prev: request });
+    } catch (err) {
+      console.log(err);
+      res.status(400).send("ERROR " + err.messaage);
     }
   }
 );
