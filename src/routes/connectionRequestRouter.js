@@ -22,7 +22,7 @@ connectionRequestRouter.post(
       }
 
       //checking if toUserId is valid mongoose-id or not
-      console.log(toUserId);
+      // console.log(toUserId);
       if (!mongoose.Types.ObjectId.isValid(toUserId)) {
         return res.status(400).send("Invalid user ID format");
       }
