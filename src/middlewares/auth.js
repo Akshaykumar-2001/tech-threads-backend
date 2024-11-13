@@ -5,7 +5,7 @@ const userAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
     if (!token) {
-      throw new Error("Token not valid Login again !!");
+      return res.status(401).json({ message: "please login again ! " });
     }
     const decodeData = await jwt.verify(token, "Akshay$1209");
     const user = await User.findById(decodeData._id);

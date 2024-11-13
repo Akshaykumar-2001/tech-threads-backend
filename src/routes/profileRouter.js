@@ -12,11 +12,11 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
     const user = await User.find({ firstName: userName });
     if (!user === 0) {
-      res.send("user Not found");
+      res.json("user Not found");
     }
-    res.send(user);
+    res.json({ message: "user sent!", user });
   } catch (err) {
-    res.status(400).send("ERROR - " + err.message);
+    res.status(400).json("ERROR - " + err.message);
   }
 });
 

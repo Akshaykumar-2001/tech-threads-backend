@@ -33,7 +33,7 @@ authRouter.post("/login", async (req, res) => {
     // checking weather user is there or not
     const user = await User.findOne({ emailId });
     if (!user) {
-      throw new Error("Email/password is incorrect");
+      throw new Error("User dose not exist. Sign In ");
     }
     // checking pass
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -44,10 +44,10 @@ authRouter.post("/login", async (req, res) => {
     const jwtToken = await jwt.sign({ _id: user._id }, "Akshay$1209", {
       expiresIn: "1h",
     });
-    console.log(jwtToken);
+    // console.log(jwtToken);
     // attacking token to cookies in (name , value) pairs
     res.cookie("token", jwtToken);
-    res.json({ message: "login successfully !" });
+    res.json({ message: "login successfully !", user });
   } catch (err) {
     res.status(400).send("ERROR - " + err.message);
   }
