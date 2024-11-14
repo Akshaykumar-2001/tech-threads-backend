@@ -4,6 +4,7 @@ const { validateSignUpData } = require("../utils/validators");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
+const USER_SAFE_DATA = "firstName lastName photoUrl age gender about skills";
 
 authRouter.post("/signup", async (req, res) => {
   try {

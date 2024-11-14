@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
   const userName = req.user.firstName;
-  console.log(userName);
+  // console.log(userName);
   try {
     const user = await User.find({ firstName: userName });
     if (!user === 0) {
@@ -27,11 +27,11 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     }
     const newData = req.body;
     const user = req.user;
-    Object.keys(newData).every((key) => {
+    Object.keys(newData).forEach((key) => {
       user[key] = newData[key];
     });
-    await user.save();
-    res.send("edit successful !! ");
+    const newUser = await user.save();
+    res.json({ message: "edit successful !! ", user: newUser });
   } catch (err) {
     res.status(400).send("ERROR - " + err.message);
   }

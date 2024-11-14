@@ -33,12 +33,21 @@ const userSchema = new mongoose.Schema(
     age: {
       type: Number,
       min: 18,
+      validate(value) {
+        if (!isNaN(value) && !isNaN(parseFloat(value))) {
+        } else {
+          throw new Error("age must be number");
+        }
+        value = parseInt(value);
+        console.log(value);
+      },
     },
     gender: {
       type: String,
       lowercase: true,
       validate(value) {
-        // value = value.lowercase;
+        value = value.toLowerCase();
+
         if (value === "male" || value === "female" || value === "others") {
         } else {
           throw new Error("Invalid Gender ! ");
@@ -54,6 +63,11 @@ const userSchema = new mongoose.Schema(
     about: {
       type: String,
       default: "Default Bio !",
+      validate(value) {
+        if (value.length > 50) {
+          throw new Error("Bio must be less than 50 chars");
+        }
+      },
     },
     skills: {
       type: [String],
