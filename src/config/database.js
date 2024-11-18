@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const connectDB = async () => {
   await mongoose
     .connect
-    //env update **
+    //process.env.
     ();
 };
 module.exports = connectDB;

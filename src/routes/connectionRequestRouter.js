@@ -72,11 +72,12 @@ connectionRequestRouter.post(
       const { status, requestId } = req.params; //requestId - connectionRequestModel-> _id
 
       //validate status
+      console.log(status);
       if (status === "accepted" || status === "rejected") {
+        //only accepted or  rejected is ok in this API
       } else {
         throw new Error("Invalid status !!");
       }
-
       //checking for mongoose id is valid or not
       if (!mongoose.Types.ObjectId.isValid(requestId)) {
         return res.status(400).send("Invalid user ID format");
@@ -93,7 +94,7 @@ connectionRequestRouter.post(
         return res.status(400).send("invalid user");
       }
       request.status = status;
-      const data = await request.save();
+      await request.save();
 
       res.json({ message: status, prev: request });
     } catch (err) {
