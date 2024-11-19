@@ -13,7 +13,8 @@ userRouter.get("/user/requests/received", userAuth, async (req, res) => {
       toUserId: loggedInUser,
       status: "interested",
     }).populate("fromUserId", USER_SAFE_DATA);
-    res.send(requests);
+
+    res.json({ requests });
   } catch (err) {
     res.status(400).send("ERROR " + err.message);
   }

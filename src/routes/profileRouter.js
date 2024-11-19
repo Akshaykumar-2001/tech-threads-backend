@@ -49,7 +49,7 @@ profileRouter.patch("/profile/editPassword", userAuth, async (req, res) => {
     const newHash = await bcrypt.hash(newPassword, 10);
     user.password = newHash;
     await user.save();
-    res.send("password updated");
+    res.json({ message: "password updated" });
   } catch (err) {
     res.status(400).send("ERROR - " + err.message);
   }
