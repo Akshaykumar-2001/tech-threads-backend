@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const authRouter = express.Router();
 const { validateSignUpData } = require("../utils/validators");
@@ -21,7 +22,7 @@ authRouter.post("/signup", async (req, res) => {
       password: passwordHash,
     }); // new instance of user from User model
     await user.save();
-    res.send("saved to DB");
+    res.json({ message: "saved to DB" });
   } catch (err) {
     console.log(err);
     res.status(400).send(err.message);
@@ -42,9 +43,13 @@ authRouter.post("/login", async (req, res) => {
       throw new Error("Email/password is incorrect");
     }
     // verifying and getting data from token
-    const jwtToken = await jwt.sign({ _id: user._id }, "Akshay$1209", {
-      expiresIn: "1h",
-    });
+    const jwtToken = await jwt.sign(
+      { _id: user._id },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
     // console.log(jwtToken);
     // attacking token to cookies in (name , value) pairs
     res.cookie("token", jwtToken);
@@ -57,7 +62,7 @@ authRouter.post("/login", async (req, res) => {
 authRouter.post("/logout", async (req, res) => {
   try {
     res.cookie("token", null, { expires: new Date(Date.now()) });
-    res.send("loged out !!");
+    res.json({ message: "loged out !!" });
   } catch (err) {
     res.status(400).send("ERROR - " + err.message);
   }

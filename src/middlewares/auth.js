@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
@@ -7,7 +8,7 @@ const userAuth = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({ message: "please login again ! " });
     }
-    const decodeData = await jwt.verify(token, "Akshay$1209");
+    const decodeData = await jwt.verify(token, process.env.JWT_SECRET_KEY);
     const user = await User.findById(decodeData._id);
     if (!user) {
       throw new Error("User not valid Login again !!");
