@@ -11,7 +11,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://tech-threads-frontend.onrender.com/",
+    origin: "https://scintillating-fudge-a089e5.netlify.app/",
     // origin: "http://localhost:5173",
     credentials: true,
   })
