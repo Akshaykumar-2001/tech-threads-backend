@@ -72,7 +72,7 @@ connectionRequestRouter.post(
       const { status, requestId } = req.params; //requestId - connectionRequestModel-> _id
 
       //validate status
-      console.log(status);
+      // console.log(status);
       if (status === "accepted" || status === "rejected") {
         //only accepted or  rejected is ok in this API
       } else {

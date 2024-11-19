@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
           throw new Error("age must be number");
         }
         value = parseInt(value);
-        console.log(value);
+        // console.log(value);
       },
     },
     gender: {
